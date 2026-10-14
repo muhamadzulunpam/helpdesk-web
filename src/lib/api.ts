@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const TOKEN_KEY = 'helpdesk_token'
+export const AUTH_EXPIRED_EVENT = 'auth:expired'
 
 // Tempat menyimpan token login di browser
 export const tokenStorage = {
@@ -23,12 +24,13 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Token ditolak server (401): hapus token yang sudah tidak berlaku
+// Token ditolak server (401): hapus token dan kabari aplikasi agar logout
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
+    if (axios.isAxiosError(error) && error.response?.status === 401 && tokenStorage.get()) {
       tokenStorage.clear()
+      window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
     }
     return Promise.reject(error)
   },
