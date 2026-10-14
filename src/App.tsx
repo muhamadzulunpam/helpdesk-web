@@ -1,9 +1,14 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import AppLayout from './components/layout/AppLayout'
 import GuestRoute from './components/GuestRoute'
 import ProtectedRoute from './components/ProtectedRoute'
+import RequireRole from './components/RequireRole'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
+import NotFoundPage from './pages/NotFoundPage'
 import RegisterPage from './pages/RegisterPage'
+import TicketsPage from './pages/TicketsPage'
+import UsersPage from './pages/UsersPage'
 
 export default function App() {
   return (
@@ -14,10 +19,17 @@ export default function App() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<DashboardPage />} />
-      </Route>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/tickets" element={<TicketsPage />} />
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+          <Route element={<RequireRole roles={['admin']} />}>
+            <Route path="/users" element={<UsersPage />} />
+          </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Route>
     </Routes>
   )
 }
