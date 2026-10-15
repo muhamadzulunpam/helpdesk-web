@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage'
 import TicketsPage from './pages/TicketsPage'
 import UsersPage from './pages/UsersPage'
 import TicketDetailPage from './pages/TicketDetailPage'
+import NewTicketPage from './pages/NewTicketPage'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/tickets" element={<TicketsPage />} />
+          <Route path="/tickets/new" element={<NewTicketPage />} />
           <Route path="/tickets/:id" element={<TicketDetailPage />} />
 
           <Route element={<RequireRole roles={['admin']} />}>

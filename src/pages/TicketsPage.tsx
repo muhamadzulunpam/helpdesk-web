@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import Pagination from '../components/Pagination'
 import Placeholder from '../components/Placeholder'
@@ -7,6 +7,7 @@ import { useCategories, useTickets } from '../features/tickets/queries'
 import TicketFilterBar from '../features/tickets/TicketFilterBar'
 import TicketTable from '../features/tickets/TicketTable'
 import { getErrorMessage } from '../lib/errors'
+
 
 export default function TicketsPage() {
   // Filter dan halaman disimpan di URL, bukan di state biasa
@@ -39,7 +40,18 @@ export default function TicketsPage() {
 
   return (
     <>
-      <PageHeader title="Tiket" description="Daftar tiket bantuan." />
+      <PageHeader
+        title="Tiket"
+        description="Daftar tiket bantuan."
+        action={
+          <Link
+            to="/tickets/new"
+            className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            Buat tiket
+          </Link>
+        }
+      />
 
       <TicketFilterBar
         filters={filters}
