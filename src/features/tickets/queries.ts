@@ -3,6 +3,7 @@ import type { TicketStatus } from '../../types'
 import {
   assignTicket,
   createComment,
+  createTicketWithFiles,
   deleteAttachment,
   fetchAgents,
   fetchAttachments,
@@ -15,7 +16,6 @@ import {
   type CreateCommentPayload,
   type TicketFilters,
 } from './api'
-
 /* ---------- Daftar ---------- */
 
 export function useTickets(filters: TicketFilters) {
@@ -127,5 +127,17 @@ export function useDeleteAttachment(ticketId: number) {
   return useMutation({
     mutationFn: (id: number) => deleteAttachment(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['attachments', ticketId] }),
+  })
+}
+
+/* ---------- Buat tiket ---------- */
+
+export function useCreateTicket() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createTicketWithFiles,
+    // Daftar tiket harus dimuat ulang supaya tiket baru muncul
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tickets'] }),
   })
 }
