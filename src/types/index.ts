@@ -74,3 +74,12 @@ export interface Attachment {
   download_url: string
   created_at: string | null
 }
+export interface DashboardStats {
+  total: number
+  by_status: Record<TicketStatus, number>
+  by_priority: Record<TicketPriority, number>
+  by_category: { category: string; total: number }[]
+  unassigned: number
+  created_last_7_days: number
+  avg_resolution_hours: number | null
+}
