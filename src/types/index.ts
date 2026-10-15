@@ -54,3 +54,23 @@ export interface Paginated<T> {
     to: number | null
   }
 }
+export interface Comment {
+  id: number
+  ticket_id: number
+  body: string
+  is_internal: boolean
+  author: UserSummary | null
+  created_at: string | null
+}
+
+export interface Attachment {
+  id: number
+  ticket_id: number
+  comment_id: number | null
+  original_name: string
+  mime: string
+  size: number
+  uploaded_by: UserSummary | null
+  download_url: string
+  created_at: string | null
+}
