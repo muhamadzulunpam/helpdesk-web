@@ -23,3 +23,8 @@ export function getErrorMessage(error: unknown): string {
   }
   return 'Terjadi kesalahan.'
 }
+
+// Kode status HTTP dari error API (403, 404, dst.), atau undefined kalau bukan error HTTP
+export function getErrorStatus(error: unknown): number | undefined {
+  return axios.isAxiosError(error) ? error.response?.status : undefined
+}
