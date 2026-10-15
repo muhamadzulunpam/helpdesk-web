@@ -5,6 +5,7 @@ import type {
   Comment,
   Paginated,
   Ticket,
+  TicketPriority,
   TicketStatus,
   User,
   UserSummary,
@@ -114,4 +115,43 @@ export async function downloadAttachment(attachment: Attachment): Promise<void> 
   link.click()
   link.remove()
   URL.revokeObjectURL(url)
+}
+
+/* ---------- Buat tiket ---------- */
+
+export interface CreateTicketPayload {
+  title: string
+  description: string
+  category_id: number | null
+  priority: TicketPriority
+}
+
+export interface CreateTicketResult {
+  ticket: Ticket
+  failedFiles: string[] // nama file yang gagal diunggah
+}
+
+export async function createTicket(payload: CreateTicketPayload): Promise<Ticket> {
+  const response = await api.post<{ data: Ticket }>('/tickets', payload)
+  return response.data.data
+}
+
+// Buat tiket dulu, lalu unggah lampiran satu per satu.
+// Kegagalan satu lampiran tidak membatalkan tiket yang sudah jadi.
+export async function createTicketWithFiles(input: {
+  payload: CreateTicketPayload
+  files: File[]
+}): Promise<CreateTicketResult> {
+  const ticket = await createTicket(input.payload)
+  const failedFiles: string[] = []
+
+  for (const file of input.files) {
+    try {
+      await uploadAttachment(ticket.id, file)
+    } catch {
+      failedFiles.push(file.name)
+    }
+  }
+
+  return { ticket, failedFiles }
 }
