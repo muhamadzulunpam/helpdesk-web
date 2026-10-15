@@ -30,3 +30,12 @@ export const priorityStyles: Record<TicketPriority, string> = {
 
 export const statusOptions = Object.entries(statusLabels).map(([value, label]) => ({ value, label }))
 export const priorityOptions = Object.entries(priorityLabels).map(([value, label]) => ({ value, label }))
+
+// Cermin aturan perpindahan status di backend, dipakai untuk menentukan tombol yang tampil.
+// Backend tetap pemutus akhir; ini hanya agar tombol yang tidak berlaku tidak muncul.
+export const statusTransitions: Record<TicketStatus, TicketStatus[]> = {
+  open: ['in_progress', 'closed'],
+  in_progress: ['resolved', 'open'],
+  resolved: ['closed', 'in_progress'],
+  closed: [],
+}
